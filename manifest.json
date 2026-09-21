@@ -1,7 +1,7 @@
 {
   "id": "kkongkkongi",
   "name": "Kkongkkongi",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "minAppVersion": "1.0.0",
   "description": "Encrypt a note with AES-256-GCM and unlock it inline. A little character hugs a padlock while the note is locked. English and Korean.",
   "author": "mschoi",
