@@ -4,8 +4,7 @@ Encrypt a note and unlock it right where it sits. A little character hugs a padl
 
 노트를 꽁꽁 숨겨주는 Obsidian 플러그인. 꽁꽁이가 자물쇠를 안고 지켜주다가, 암호를 넣으면 그 자리에서 내용을 펼쳐 보여줍니다.
 
-> The interface follows Obsidian's language. English and Korean are included; you can also pin one in the settings.
-> 인터페이스는 옵시디언 언어 설정을 따릅니다. 영어·한국어를 지원하며 설정에서 고정할 수도 있습니다.
+![A locked note showing the character hugging a padlock](images/EN_4.png)
 
 ---
 
@@ -23,7 +22,22 @@ Kkongkkongi encrypts **the content that gets written to disk**. Open a locked no
 - **Plaintext never hits disk** — decrypted content lives only in the DOM
 - **Tamper detection** — a damaged ciphertext fails the GCM auth tag check
 - **Theme aware** — the character follows your light/dark theme
-- **English + Korean**
+- **English and Korean**
+
+## How it looks
+
+Get the password wrong and the character is startled — it shakes, then settles back.
+
+![The character with X eyes after a wrong password](images/EN_5.png)
+
+Get it right and the note unfolds in place, fully rendered as markdown.
+
+![The note unlocked, content rendered inline](images/EN_6.png)
+
+The interface follows Obsidian's language, and you can pin one in the settings.
+인터페이스는 옵시디언 언어 설정을 따르며, 설정에서 고정할 수도 있습니다.
+
+![The same locked note in Korean](images/KO_4.png)
 
 ## Usage
 
@@ -34,6 +48,8 @@ Command palette (`Ctrl/Cmd + P`):
 | Lock this note | Asks for a password twice, then encrypts the note |
 | Remove lock permanently | Writes the content back as plaintext |
 | Lock everything that is open | Immediately re-locks any unlocked block |
+
+![The lock dialog asking for a password twice](images/EN_3.png)
 
 After locking, opening that note shows the character asking for a password. Enter it and the content renders as markdown. Move to another note and it locks again.
 
