@@ -85,7 +85,7 @@ Settings → Community plugins → Browse → search `Kkongkkongi` → Install �
 
 ### Manual
 
-1. Download `manifest.json`, `main.js` and `styles.css` from [Releases](../../releases)
+1. Download `manifest.json`, `main.js` and `styles.css` from [Releases](https://github.com/applan/obsidian-kkongkkongi/releases)
 2. Put them in `<vault>/.obsidian/plugins/kkongkkongi/`
 3. Restart Obsidian and enable the plugin
 
