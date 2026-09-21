@@ -168,13 +168,26 @@ const LOCALES = {
 
 let CURRENT_LANG = "en";
 
-/** Read Obsidian's UI language; anything we don't ship falls back to English. */
+/** Read the UI language; anything we don't ship falls back to English.
+ *
+ *  Obsidian's bundled moment tracks the app's language setting, so we ask that
+ *  first, then the system language. We deliberately avoid reading Obsidian's
+ *  internal localStorage keys — they are undocumented and may change. */
 function detectLang() {
   try {
-    const v = window.localStorage.getItem("language");
-    const code = String(v || "").slice(0, 2);
+    const m = window.moment;
+    if (m && typeof m.locale === "function") {
+      const code = String(m.locale() || "").slice(0, 2);
+      if (LOCALES[code]) return code;
+    }
+  } catch (e) { /* moment may not be exposed */ }
+
+  try {
+    const nav = window.navigator;
+    const code = String((nav && nav.language) || "").slice(0, 2);
     if (LOCALES[code]) return code;
-  } catch (e) { /* localStorage may be unavailable */ }
+  } catch (e) { /* navigator may be unavailable */ }
+
   return "en";
 }
 

@@ -42,7 +42,9 @@ function mkEl(tag) {
   };
 }
 
-let STORED_LANGUAGE = "";                 // what Obsidian would have in localStorage
+// what Obsidian's bundled moment / the system would report
+let MOMENT_LOCALE = null;
+let NAV_LANGUAGE = null;
 
 global.document = {
   createElementNS(ns, tag) { const el = mkEl(tag); el.ns = ns; return el; },
@@ -52,7 +54,12 @@ global.window = {
   setTimeout: function () { return setTimeout.apply(null, arguments); },
   clearTimeout: function () { return clearTimeout.apply(null, arguments); },
   addEventListener() {},
-  localStorage: { getItem(k) { return k === "language" ? STORED_LANGUAGE : null; } },
+  get moment() {
+    return MOMENT_LOCALE === null ? undefined : { locale: () => MOMENT_LOCALE };
+  },
+  get navigator() {
+    return NAV_LANGUAGE === null ? undefined : { language: NAV_LANGUAGE };
+  },
 };
 
 const walk = (el, out) => {
@@ -230,19 +237,39 @@ async function uiSuite(lang, enc) {
   const badPh = enKeys.filter((k) => ph(L.en[k]) !== ph(L.ko[k]));
   ok("placeholders consistent across locales", badPh.length === 0, badPh.join(", "));
 
-  STORED_LANGUAGE = "";     T.setLang("auto");
+  const setEnv = (moment, nav) => { MOMENT_LOCALE = moment; NAV_LANGUAGE = nav; };
+
+  setEnv("en", null);        T.setLang("auto");
   ok("auto -> en when Obsidian is English", T.t("open") === L.en.open);
-  STORED_LANGUAGE = "ko";   T.setLang("auto");
+  setEnv("ko", null);        T.setLang("auto");
   ok("auto -> ko when Obsidian is Korean", T.t("open") === L.ko.open);
-  STORED_LANGUAGE = "fr";   T.setLang("auto");
+  setEnv("fr", null);        T.setLang("auto");
   ok("auto -> en for an unsupported language", T.t("open") === L.en.open);
-  STORED_LANGUAGE = "ko";   T.setLang("en");
-  ok("explicit en overrides Obsidian", T.t("open") === L.en.open);
+  setEnv("ko-kr", null);     T.setLang("auto");
+  ok("auto handles region codes (ko-kr)", T.t("open") === L.ko.open);
+
+  // moment missing -> fall back to the system language
+  setEnv(null, "ko-KR");     T.setLang("auto");
+  ok("no moment -> uses system language", T.t("open") === L.ko.open);
+  setEnv(null, "de-DE");     T.setLang("auto");
+  ok("no moment, unsupported system language -> en", T.t("open") === L.en.open);
+  setEnv(null, null);        T.setLang("auto");
+  ok("nothing available -> en", T.t("open") === L.en.open);
+
+  setEnv("ko", null);        T.setLang("en");
+  ok("explicit en overrides detection", T.t("open") === L.en.open);
   T.setLang("ko");
-  ok("explicit ko overrides Obsidian", T.t("open") === L.ko.open);
+  ok("explicit ko overrides detection", T.t("open") === L.ko.open);
   ok("unknown key falls back to the key itself", T.t("nope__") === "nope__");
   ok("interpolation", T.t("unlockedTimed", { sec: 7 }).indexOf("7") >= 0);
-  STORED_LANGUAGE = "";
+
+  // the plugin must not touch Obsidian's localStorage
+  const mainSrc = fs.readFileSync(MAIN, "utf8");
+  const storageHits = mainSrc.split("\n").filter((l) =>
+    /localStorage|sessionStorage/.test(l) && !l.trim().startsWith("*") && !l.trim().startsWith("//"));
+  ok("no localStorage / sessionStorage use", storageHits.length === 0, storageHits.join(" | "));
+
+  setEnv("en", null);
 
   console.log("\n[ registration ]");
   const p0 = newPlugin();
