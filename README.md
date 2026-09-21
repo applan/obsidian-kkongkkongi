@@ -1,8 +1,13 @@
-# Kkongkkongi (꽁꽁이)
+<div align="center">
+
+[![English](https://img.shields.io/badge/README-English-7c5cff?style=for-the-badge)](README.md)
+[![한국어](https://img.shields.io/badge/README-%ED%95%9C%EA%B5%AD%EC%96%B4-4a4a4a?style=for-the-badge)](README.ko.md)
+
+</div>
+
+# Kkongkkongi
 
 Encrypt a note and unlock it right where it sits. A little character hugs a padlock while your note is locked, and hands it back when you enter the password.
-
-노트를 꽁꽁 숨겨주는 Obsidian 플러그인. 꽁꽁이가 자물쇠를 안고 지켜주다가, 암호를 넣으면 그 자리에서 내용을 펼쳐 보여줍니다.
 
 ![A locked note showing the character hugging a padlock](images/EN_4.png)
 
@@ -22,7 +27,7 @@ Kkongkkongi encrypts **the content that gets written to disk**. Open a locked no
 - **Plaintext never hits disk** — decrypted content lives only in the DOM
 - **Tamper detection** — a damaged ciphertext fails the GCM auth tag check
 - **Theme aware** — the character follows your light/dark theme
-- **English and Korean**
+- **English and Korean** — the interface follows Obsidian's language, or pin one in the settings
 
 ## How it looks
 
@@ -34,8 +39,7 @@ Get it right and the note unfolds in place, fully rendered as markdown.
 
 ![The note unlocked, content rendered inline](images/EN_6.png)
 
-The interface follows Obsidian's language, and you can pin one in the settings.
-인터페이스는 옵시디언 언어 설정을 따르며, 설정에서 고정할 수도 있습니다.
+The same note with Obsidian set to Korean:
 
 ![The same locked note in Korean](images/KO_4.png)
 
@@ -90,7 +94,7 @@ Only standard primitives from Node's built-in `crypto` module. No home-grown cry
 
 - Encrypted notes are **excluded from content search and the graph view** — the file only holds ciphertext.
 - **Source mode shows the ciphertext.** Content unfolds in Reading view and Live Preview.
-- Uses Node's `crypto`, so it is **desktop only** (`isDesktopOnly: true`).
+- Uses Node's `crypto`, so it is **desktop only**.
 - This does not protect the disk itself. Pair it with BitLocker, FileVault or Cryptomator if you are worried about a stolen device.
 
 ## Installation
