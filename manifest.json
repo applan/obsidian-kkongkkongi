@@ -1,9 +1,9 @@
 {
   "id": "kkongkkongi",
-  "name": "꽁꽁이",
+  "name": "Kkongkkongi",
   "version": "1.0.0",
   "minAppVersion": "1.0.0",
-  "description": "꽁꽁이가 자물쇠를 안고 노트를 지켜줍니다. 내용을 AES-256-GCM 으로 실제 암호화하고, 노트 안에서 바로 풀어 봅니다.",
+  "description": "Encrypt a note with AES-256-GCM and unlock it inline. A little character hugs a padlock while the note is locked. English and Korean.",
   "author": "mschoi",
   "isDesktopOnly": true
 }

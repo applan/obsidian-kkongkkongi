@@ -1,52 +1,55 @@
-# 꽁꽁이 (Kkongkkongi)
+# Kkongkkongi (꽁꽁이)
+
+Encrypt a note and unlock it right where it sits. A little character hugs a padlock while your note is locked, and hands it back when you enter the password.
 
 노트를 꽁꽁 숨겨주는 Obsidian 플러그인. 꽁꽁이가 자물쇠를 안고 지켜주다가, 암호를 넣으면 그 자리에서 내용을 펼쳐 보여줍니다.
 
-An Obsidian plugin that encrypts note content with AES-256-GCM and reveals it inline. A little character hugs a padlock while your note is locked.
+> The interface follows Obsidian's language. English and Korean are included; you can also pin one in the settings.
+> 인터페이스는 옵시디언 언어 설정을 따릅니다. 영어·한국어를 지원하며 설정에서 고정할 수도 있습니다.
 
 ---
 
-## 왜 만들었나 / Why
+## Why this exists
 
-암호를 거는 플러그인 중에는 **화면만 가리고 파일 내용은 평문으로 두는** 것이 있습니다. 그런 경우 `.md` 파일을 메모장으로 열면 내용이 그대로 보입니다.
+Some "lock" plugins only cover the screen — the `.md` file stays in plaintext, so opening it in any text editor reveals everything.
 
-꽁꽁이는 **파일에 저장되는 내용 자체를 암호화**합니다. 잠긴 노트를 텍스트 편집기로 열면 암호문만 보입니다.
+Kkongkkongi encrypts **the content that gets written to disk**. Open a locked note in Notepad and you see ciphertext.
 
-Some locking plugins only blur the UI, leaving the `.md` file in plaintext. Kkongkkongi encrypts the content that is written to disk.
+## Features
 
-## 특징 / Features
+- **Real encryption** — AES-256-GCM, key derived with scrypt
+- **Inline unlock** — no modal; the content unfolds inside the note
+- **Locks itself again** — on leaving the note, losing window focus, or after a timeout
+- **Plaintext never hits disk** — decrypted content lives only in the DOM
+- **Tamper detection** — a damaged ciphertext fails the GCM auth tag check
+- **Theme aware** — the character follows your light/dark theme
+- **English + Korean**
 
-- **실제 암호화** — AES-256-GCM, 키는 scrypt 로 유도
-- **인라인 해제** — 모달 없이 노트 안에서 바로 펼쳐짐
-- **자동 재잠금** — 다른 노트로 이동 / 창 포커스 이탈 / 시간 경과
-- **평문 미저장** — 복호화 결과는 화면에만 존재
-- **변조 감지** — GCM 인증 태그로 암호문이 손상되면 열리지 않음
-- **테마 대응** — 캐릭터 색이 라이트/다크 테마를 따라감
+## Usage
 
-## 사용법 / Usage
+Command palette (`Ctrl/Cmd + P`):
 
-명령 팔레트(`Ctrl/Cmd + P`):
-
-| 명령 | 설명 |
+| Command | What it does |
 | --- | --- |
-| 이 노트 꽁꽁 잠그기 | 암호를 2회 입력해 노트를 암호화 |
-| 이 노트 잠금 영구 해제 | 평문으로 되돌림 |
-| 열려 있는 것 모두 다시 꽁꽁 | 펼쳐진 내용을 즉시 잠금 |
+| Lock this note | Asks for a password twice, then encrypts the note |
+| Remove lock permanently | Writes the content back as plaintext |
+| Lock everything that is open | Immediately re-locks any unlocked block |
 
-잠근 뒤에는 그 노트를 열 때마다 꽁꽁이가 암호를 묻습니다. 암호를 넣으면 내용이 마크다운으로 렌더링되고, 다른 노트로 이동하면 자동으로 다시 잠깁니다.
+After locking, opening that note shows the character asking for a password. Enter it and the content renders as markdown. Move to another note and it locks again.
 
-## 설정 / Settings
+## Settings
 
-| 설정 | 기본값 |
+| Setting | Default |
 | --- | --- |
-| 꽁꽁이 보여주기 | 켬 |
-| 다른 노트로 가면 다시 꽁꽁 | 켬 |
-| 창을 벗어나면 다시 꽁꽁 | 켬 |
-| 자동 잠금 시간(초) | 0 (사용 안 함) |
+| Language | Follow Obsidian |
+| Show the character | On |
+| Lock when leaving the note | On |
+| Lock when the window loses focus | On |
+| Auto-lock after (seconds) | 0 (off) |
 
-## 저장 형식 / Storage format
+## Storage format
 
-잠근 노트는 이렇게 저장됩니다.
+A locked note is stored like this:
 
 ~~~
 ```kkong-v1
@@ -54,47 +57,49 @@ Some locking plugins only blur the UI, leaving the `.md` file in plaintext. Kkon
 ```
 ~~~
 
-| 항목 | 값 |
+| | |
 | --- | --- |
-| 알고리즘 | AES-256-GCM |
-| 키 유도 | scrypt (N=32768, r=8, p=1), 32바이트 키 |
-| salt | 16바이트, 잠글 때마다 새로 생성 |
-| IV | 12바이트, 잠글 때마다 새로 생성 |
-| 인증 태그 | 16바이트 |
+| Cipher | AES-256-GCM |
+| Key derivation | scrypt (N=32768, r=8, p=1), 32-byte key |
+| salt | 16 bytes, regenerated on every lock |
+| IV | 12 bytes, regenerated on every lock |
+| Auth tag | 16 bytes |
 
-Node.js 내장 `crypto` 모듈의 표준 조합만 사용합니다. 자체 설계한 암호 알고리즘은 없습니다.
+Only standard primitives from Node's built-in `crypto` module. No home-grown cryptography.
 
-## 주의 / Caveats
+## Caveats
 
 > [!WARNING]
-> **암호를 잊으면 복구할 수 없습니다.** 설계상 복구 수단이 존재하지 않습니다. 중요한 노트는 잠그기 전에 백업하세요.
+> **A forgotten password cannot be recovered.** There is no recovery path by design. Back up important notes before locking them.
 
-- 암호화된 노트는 **본문 검색과 그래프 뷰에서 제외**됩니다. 파일에 암호문만 있기 때문입니다.
-- **소스 모드에서는 암호문이 그대로 보입니다.** 읽기 뷰와 라이브 프리뷰에서만 펼쳐집니다.
-- Node.js `crypto` 를 사용하므로 **데스크톱 전용**입니다 (`isDesktopOnly: true`).
-- 플러그인은 디스크 자체를 보호하지 않습니다. 기기 도난까지 대비하려면 BitLocker, FileVault, Cryptomator 같은 디스크/폴더 암호화를 함께 쓰세요.
+- Encrypted notes are **excluded from content search and the graph view** — the file only holds ciphertext.
+- **Source mode shows the ciphertext.** Content unfolds in Reading view and Live Preview.
+- Uses Node's `crypto`, so it is **desktop only** (`isDesktopOnly: true`).
+- This does not protect the disk itself. Pair it with BitLocker, FileVault or Cryptomator if you are worried about a stolen device.
 
-## 설치 / Installation
+## Installation
 
-### 커뮤니티 플러그인 (심사 통과 후)
+### Community plugins
 
-설정 → 커뮤니티 플러그인 → 찾아보기 → `꽁꽁이` 검색 → 설치 → 활성화
+Settings → Community plugins → Browse → search `Kkongkkongi` → Install → Enable
 
-### 수동 설치
+### Manual
 
-1. [Releases](../../releases) 에서 `manifest.json`, `main.js`, `styles.css` 다운로드
-2. `<보관함>/.obsidian/plugins/kkongkkongi/` 폴더를 만들고 세 파일을 넣기
-3. Obsidian 재시작 → 설정 → 커뮤니티 플러그인에서 활성화
+1. Download `manifest.json`, `main.js` and `styles.css` from [Releases](../../releases)
+2. Put them in `<vault>/.obsidian/plugins/kkongkkongi/`
+3. Restart Obsidian and enable the plugin
 
-## 개발 / Development
+## Development
 
-빌드 단계가 없습니다. `main.js` 는 CommonJS 로 직접 작성되어 있어 그대로 실행됩니다.
+No build step — `main.js` is plain CommonJS and runs as written.
 
 ```bash
-node --check main.js     # 구문 검사
-node test/test.js        # 테스트 (암호화 · 상태 전이 · 캐릭터)
+node --check main.js     # syntax
+node test/test.js        # tests: crypto, format, i18n, state transitions, character
 ```
 
-## 라이선스 / License
+Adding a language: add a table to `LOCALES` in `main.js` keyed by the two-letter code, and add the option to the language dropdown. The test suite checks that every locale has the same keys and the same placeholders.
+
+## License
 
 MIT
