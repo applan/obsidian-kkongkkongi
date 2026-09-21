@@ -1,0 +1,249 @@
+/* 꽁꽁이 (Kkongkkongi) */
+
+.kk {
+  margin: 0.8em 0;
+}
+
+/* ── 캐릭터 ────────────────────────────────────────── */
+
+.kk-char-host {
+  line-height: 0;
+}
+
+.kk-char {
+  width: 104px;
+  height: 104px;
+  overflow: visible;
+}
+
+.kk-char-host--sm .kk-char,
+.kk-char--sm {
+  width: 30px;
+  height: 30px;
+}
+
+/* 몸통 — 테마 강조색을 부드럽게 */
+.kk-body {
+  fill: var(--interactive-accent);
+}
+
+.kk-blush {
+  fill: var(--text-on-accent);
+  opacity: 0.35;
+}
+
+/* 눈·입 선 */
+.kk-line {
+  fill: none;
+  stroke: var(--text-on-accent);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.kk-mouth {
+  stroke-width: 2.6;
+}
+
+.kk-mouth-o {
+  fill: var(--text-on-accent);
+  stroke: none;
+  opacity: 0.85;
+}
+
+.kk-eye {
+  fill: var(--text-on-accent);
+}
+
+.kk-glint {
+  fill: var(--interactive-accent);
+  opacity: 0.9;
+}
+
+/* 자물쇠 */
+.kk-shackle {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 5.5;
+  stroke-linecap: round;
+}
+
+.kk-lock {
+  fill: var(--text-muted);
+}
+
+.kk-keyhole,
+.kk-keyhole-stem {
+  fill: var(--background-secondary);
+  stroke: var(--background-secondary);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+
+.kk-sparkle {
+  fill: var(--text-accent);
+}
+
+/* ── 잠긴 상태 ─────────────────────────────────────── */
+
+.kk-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55em;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m, 8px);
+  background: var(--background-secondary);
+  padding: 1.4em 1.2em 1.2em;
+  text-align: center;
+}
+
+.kk-title {
+  font-weight: 600;
+  color: var(--text-normal);
+}
+
+.kk-row {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  width: 100%;
+  max-width: 340px;
+}
+
+.kk-input {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.kk-btn {
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.kk-btn--cta {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.kk-msg:not(:empty) {
+  font-size: 0.85em;
+  color: var(--text-error);
+}
+
+/* ── 풀린 상태 ─────────────────────────────────────── */
+
+.kk-bar {
+  display: flex;
+  gap: 0.6em;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0.4em 0.7em;
+  border: 1px solid var(--background-modifier-border);
+  border-bottom: none;
+  border-radius: var(--radius-m, 8px) var(--radius-m, 8px) 0 0;
+  background: var(--background-secondary);
+  font-size: 0.85em;
+  color: var(--text-muted);
+}
+
+.kk-bar-text {
+  flex: 1;
+}
+
+.kk-actions {
+  display: flex;
+  gap: 0.4em;
+}
+
+.kk-actions .kk-btn {
+  font-size: 0.9em;
+  padding: 0.2em 0.7em;
+}
+
+.kk-content {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 0 0 var(--radius-m, 8px) var(--radius-m, 8px);
+  padding: 0.3em 1em 0.8em;
+}
+
+.kk-content > :first-child {
+  margin-top: 0.5em;
+}
+
+.kk-content > :last-child {
+  margin-bottom: 0;
+}
+
+/* ── 설정 화면 ─────────────────────────────────────── */
+
+.kk-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2em;
+  padding: 1em 0 1.4em;
+}
+
+.kk-hero-name {
+  font-size: 1.3em;
+  font-weight: 700;
+  color: var(--text-normal);
+}
+
+.kk-hero-desc {
+  color: var(--text-muted);
+  font-size: 0.9em;
+}
+
+.kk-modal-note {
+  color: var(--text-muted);
+  font-size: 0.9em;
+}
+
+.kk-edit {
+  width: 100%;
+  height: 55vh;
+  font-family: var(--font-monospace);
+  font-size: 0.9em;
+}
+
+.kk-warn {
+  color: var(--text-error);
+  margin-top: 1.5em;
+}
+
+.kk-tip {
+  color: var(--text-muted);
+  font-size: 0.9em;
+}
+
+/* ── 움직임 ────────────────────────────────────────── */
+
+.kk-pop {
+  animation: kk-pop 0.35s ease-out;
+}
+
+@keyframes kk-pop {
+  0%   { transform: scale(0.5) rotate(-12deg); opacity: 0; }
+  60%  { transform: scale(1.15) rotate(4deg);  opacity: 1; }
+  100% { transform: scale(1)    rotate(0deg);  opacity: 1; }
+}
+
+.kk-shake {
+  animation: kk-shake 0.45s ease-in-out;
+}
+
+@keyframes kk-shake {
+  0%, 100% { transform: translateX(0); }
+  15%      { transform: translateX(-7px) rotate(-4deg); }
+  30%      { transform: translateX(7px)  rotate(4deg); }
+  45%      { transform: translateX(-5px) rotate(-3deg); }
+  60%      { transform: translateX(5px)  rotate(3deg); }
+  80%      { transform: translateX(-2px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kk-pop, .kk-shake { animation: none; }
+}
